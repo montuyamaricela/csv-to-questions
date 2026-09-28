@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Turn a public CSV dataset into evidence-grounded questions, answers, and a clear data profile."
+    />
+    <meta name="theme-color" content="#07111f" />
+    <title>QuestionGrid — Ask better questions of your data</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css?v=2" />
+    <script src="/app.js?v=3" type="module"></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="/" aria-label="QuestionGrid home">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </span>
+          <span>QuestionGrid</span>
+        </a>
+        <nav aria-label="Project navigation">
+          <a class="nav-link" href="#how-it-works">How it works</a>
+          <a class="studio-link" href="/studio">Open Studio <span aria-hidden="true">↗</span></a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="eyebrow"><span></span> CSV intelligence, simplified</p>
+            <h1 id="hero-title">Turn CSV data into <em>clearer questions.</em></h1>
+            <p class="hero-description">
+              Analyze any public CSV and generate useful questions, expected answers, and supporting evidence
+              in a single workflow.
+            </p>
+            <ul class="trust-list" aria-label="Product safeguards">
+              <li>Full-file profiling</li>
+              <li>Answer evidence</li>
+              <li>5 MB safety limit</li>
+            </ul>
+          </div>
+
+          <aside class="preview-card" aria-label="Example generated question">
+            <div class="preview-status"><span></span> Analysis ready</div>
+            <div class="preview-topline">
+              <span class="preview-number">QUESTION 04</span>
+              <span class="difficulty-pill">Analysis</span>
+            </div>
+            <p class="preview-question">Which region contributes the largest share of total GDP?</p>
+            <div class="preview-answer">
+              <span>Expected answer</span>
+              <strong>East Asia &amp; Pacific</strong>
+            </div>
+            <div class="preview-evidence">
+              <span class="evidence-dot"></span>
+              <p>Grounded in computed column totals, not model guesswork.</p>
+            </div>
+            <div class="preview-lines" aria-hidden="true"><span></span><span></span><span></span></div>
+          </aside>
+        </section>
+
+        <section class="workspace" aria-labelledby="workspace-title">
+          <div class="workspace-heading">
+            <div>
+            <p class="section-kicker">New analysis</p>
+              <h2 id="workspace-title">Generate your question set</h2>
+            </div>
+            <span class="step-label">01 / Analyze</span>
+          </div>
+
+          <form id="generator-form" novalidate>
+            <div class="form-grid">
+              <div class="field-group url-field">
+                <label for="csv-url">Public CSV URL</label>
+                <div class="input-shell">
+                  <span class="link-icon" aria-hidden="true">↗</span>
+                  <input
+                    id="csv-url"
+                    name="csvUrl"
+                    type="url"
+                    inputmode="url"
+                    autocomplete="url"
+                    placeholder="https://example.com/dataset.csv"
+                    required
+                  />
+                  <button class="sample-button" id="sample-button" type="button">Use sample</button>
+                </div>
+                <p class="field-hint">The file must be publicly accessible and smaller than 5 MB.</p>
+              </div>
+
+              <div class="field-group count-field">
+                <div class="count-label-row">
+                  <label for="question-count">Questions</label>
+                  <output id="question-count-value" for="question-count">10</output>
+                </div>
+                <input id="question-count" name="maxQuestions" type="range" min="5" max="20" value="10" />
+                <div class="range-labels" aria-hidden="true"><span>5</span><span>20</span></div>
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <p><span class="secure-mark" aria-hidden="true">✓</span> Public URLs only. Private network access is blocked.</p>
+              <button class="primary-button" type="submit">
+                <span>Analyze &amp; generate</span>
+                <span class="button-arrow" aria-hidden="true">→</span>
+              </button>
+            </div>
+          </form>
+
+          <div id="form-error" class="form-error" role="alert" hidden></div>
+        </section>
+
+        <section id="progress-panel" class="progress-panel" aria-live="polite" hidden>
+          <div class="progress-copy">
+            <p class="section-kicker">Working through your data</p>
+            <h2 id="progress-title">Checking the source…</h2>
+            <p id="progress-description">Confirming the URL is public, safe, and within the file limit.</p>
+          </div>
+          <ol class="progress-steps">
+            <li class="is-active" data-progress-step="0"><span>1</span>Validate</li>
+            <li data-progress-step="1"><span>2</span>Profile</li>
+            <li data-progress-step="2"><span>3</span>Generate</li>
+          </ol>
+          <div class="progress-track"><span id="progress-bar"></span></div>
+          <div class="progress-status-row">
+            <p class="progress-activity"><span aria-hidden="true"></span><span id="progress-status">Request active</span></p>
+            <p id="progress-elapsed">0s elapsed</p>
+          </div>
+        </section>
+
+        <section id="results" class="results" tabindex="-1" aria-labelledby="results-title" hidden>
+          <div class="results-heading">
+            <div>
+              <p class="section-kicker">Your dataset, made teachable</p>
+              <h2 id="results-title">Analysis complete</h2>
+            </div>
+            <button id="new-analysis-button" class="secondary-button" type="button">Analyze another</button>
+          </div>
+
+          <div id="metric-grid" class="metric-grid"></div>
+
+          <article class="summary-card">
+            <div class="card-heading">
+              <span class="card-index">01</span>
+              <div><p>Dataset brief</p><h3>What the data says</h3></div>
+            </div>
+            <div id="dataset-summary" class="summary-copy"></div>
+          </article>
+
+          <article class="profile-card">
+            <div class="card-heading">
+              <span class="card-index">02</span>
+              <div><p>Column profile</p><h3>Structure at a glance</h3></div>
+            </div>
+            <div id="column-profile" class="column-profile"></div>
+          </article>
+
+          <article class="questions-section">
+            <div class="questions-heading">
+              <div class="card-heading">
+                <span class="card-index">03</span>
+                <div><p>Generated set</p><h3 id="question-heading">Questions &amp; answers</h3></div>
+              </div>
+              <button id="copy-all-button" class="secondary-button" type="button">Copy all</button>
+            </div>
+            <div id="question-list" class="question-list"></div>
+          </article>
+        </section>
+
+        <section id="how-it-works" class="how-it-works" aria-labelledby="how-title">
+          <div class="how-heading">
+            <p class="section-kicker">How it works</p>
+            <h2 id="how-title">A short path from raw data to useful prompts.</h2>
+          </div>
+          <div class="how-grid">
+            <article><span>01</span><h3>Inspect</h3><p>Validate the source and parse real CSV structure, including quoted and multiline fields.</p></article>
+            <article><span>02</span><h3>Measure</h3><p>Compute missing values, distinct counts, common values, and numeric statistics.</p></article>
+            <article><span>03</span><h3>Generate</h3><p>Create varied questions, expected answers, and evidence constrained by the profile.</p></article>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <a class="brand footer-brand" href="/">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>QuestionGrid</span>
+        </a>
+        <p>Public CSVs in. Grounded questions out.</p>
+      </footer>
+    </div>
+  </body>
+</html>

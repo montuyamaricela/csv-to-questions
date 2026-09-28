@@ -10,8 +10,13 @@ import { LibSQLStore } from '@mastra/libsql';
 import { csvToQuestionsWorkflow } from './workflows/csv-to-questions-workflow';
 import { textQuestionAgent } from './agents/text-question-agent';
 import { csvSummarizationAgent } from './agents/csv-summarization-agent';
+import { apiRoutes } from './server/routes';
 
 export const mastra = new Mastra({
+  server: {
+    studioBase: '/studio',
+    apiRoutes,
+  },
   workflows: { csvToQuestionsWorkflow },
   agents: {
     textQuestionAgent,
