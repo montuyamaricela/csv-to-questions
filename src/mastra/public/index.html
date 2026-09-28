@@ -7,14 +7,19 @@
       name="description"
       content="Turn a public CSV dataset into evidence-grounded questions, answers, and a clear data profile."
     />
-    <meta name="theme-color" content="#07111f" />
+    <meta name="theme-color" content="#09090b" />
     <title>QuestionGrid — Ask better questions of your data</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/styles.css?v=2" />
-    <script src="/app.js?v=3" type="module"></script>
+    <link rel="stylesheet" href="/styles.css?v=3" />
+    <script src="/app.js?v=4" type="module"></script>
   </head>
   <body>
     <div class="page-shell">
+      <div class="signal-bar" role="status">
+        <span><i></i> QuestionGrid is live</span>
+        <p>Full-file profiling · Grounded answers · Public CSVs only</p>
+      </div>
+
       <header class="site-header">
         <a class="brand" href="/" aria-label="QuestionGrid home">
           <span class="brand-mark" aria-hidden="true">
@@ -23,6 +28,7 @@
           <span>QuestionGrid</span>
         </a>
         <nav aria-label="Project navigation">
+          <a class="nav-link" href="#workspace-title">Generator</a>
           <a class="nav-link" href="#how-it-works">How it works</a>
           <a class="studio-link" href="/studio">Open Studio <span aria-hidden="true">↗</span></a>
         </nav>
@@ -31,12 +37,16 @@
       <main>
         <section class="hero" aria-labelledby="hero-title">
           <div class="hero-copy">
-            <p class="eyebrow"><span></span> CSV intelligence, simplified</p>
-            <h1 id="hero-title">Turn CSV data into <em>clearer questions.</em></h1>
+            <p class="eyebrow"><span></span> Evidence-first CSV intelligence</p>
+            <h1 id="hero-title">From raw rows to <em><span>questions</span> worth asking.</em></h1>
             <p class="hero-description">
-              Analyze any public CSV and generate useful questions, expected answers, and supporting evidence
-              in a single workflow.
+              Profile an entire public dataset, surface its real structure, and turn measured evidence into a
+              ready-to-use question set.
             </p>
+            <div class="hero-actions">
+              <a class="hero-primary" href="#workspace-title">Start an analysis <span aria-hidden="true">↘</span></a>
+              <a class="hero-secondary" href="#how-it-works">See the workflow</a>
+            </div>
             <ul class="trust-list" aria-label="Product safeguards">
               <li>Full-file profiling</li>
               <li>Answer evidence</li>
@@ -44,8 +54,10 @@
             </ul>
           </div>
 
+          <div class="hero-visual">
           <aside class="preview-card" aria-label="Example generated question">
-            <div class="preview-status"><span></span> Analysis ready</div>
+            <div class="preview-chrome" aria-hidden="true"><span></span><span></span><span></span><p>questiongrid / analysis</p></div>
+            <div class="preview-status"><span></span> Analysis ready <b>03:42</b></div>
             <div class="preview-topline">
               <span class="preview-number">QUESTION 04</span>
               <span class="difficulty-pill">Analysis</span>
@@ -61,15 +73,23 @@
             </div>
             <div class="preview-lines" aria-hidden="true"><span></span><span></span><span></span></div>
           </aside>
+          <div class="preview-metrics" aria-label="Example dataset metrics">
+            <div><span>Rows read</span><strong>12,840</strong></div>
+            <div><span>Columns</span><strong>18</strong></div>
+            <div><span>Coverage</span><strong>99.2%</strong></div>
+          </div>
+          <span class="floating-chip chip-one">deterministic profile</span>
+          <span class="floating-chip chip-two">10 grounded prompts</span>
+          </div>
         </section>
 
         <section class="workspace" aria-labelledby="workspace-title">
           <div class="workspace-heading">
             <div>
-            <p class="section-kicker">New analysis</p>
-              <h2 id="workspace-title">Generate your question set</h2>
+              <p class="section-kicker">New analysis</p>
+              <h2 id="workspace-title">Bring a dataset. Leave with a lesson plan.</h2>
             </div>
-            <span class="step-label">01 / Analyze</span>
+            <span class="step-label">01 / Workbench</span>
           </div>
 
           <form id="generator-form" novalidate>
@@ -120,15 +140,17 @@
             <h2 id="progress-title">Checking the source…</h2>
             <p id="progress-description">Confirming the URL is public, safe, and within the file limit.</p>
           </div>
-          <ol class="progress-steps">
-            <li class="is-active" data-progress-step="0"><span>1</span>Validate</li>
-            <li data-progress-step="1"><span>2</span>Profile</li>
-            <li data-progress-step="2"><span>3</span>Generate</li>
-          </ol>
-          <div class="progress-track"><span id="progress-bar"></span></div>
-          <div class="progress-status-row">
-            <p class="progress-activity"><span aria-hidden="true"></span><span id="progress-status">Request active</span></p>
-            <p id="progress-elapsed">0s elapsed</p>
+          <div class="progress-flow">
+            <ol class="progress-steps">
+              <li class="is-active" data-progress-step="0"><span>1</span><div><b>Validate source</b><small>Safety and access</small></div></li>
+              <li data-progress-step="1"><span>2</span><div><b>Profile dataset</b><small>Structure and statistics</small></div></li>
+              <li data-progress-step="2"><span>3</span><div><b>Generate set</b><small>Questions and evidence</small></div></li>
+            </ol>
+            <div class="progress-track"><span id="progress-bar"></span></div>
+            <div class="progress-status-row">
+              <p class="progress-activity"><span aria-hidden="true"></span><span id="progress-status">Request active</span></p>
+              <p id="progress-elapsed">0s elapsed</p>
+            </div>
           </div>
         </section>
 
@@ -174,12 +196,13 @@
         <section id="how-it-works" class="how-it-works" aria-labelledby="how-title">
           <div class="how-heading">
             <p class="section-kicker">How it works</p>
-            <h2 id="how-title">A short path from raw data to useful prompts.</h2>
+            <h2 id="how-title">One source. Three deliberate passes.</h2>
+            <p>Every result moves through the same visible pipeline, so generated questions stay tied to measured facts.</p>
           </div>
           <div class="how-grid">
-            <article><span>01</span><h3>Inspect</h3><p>Validate the source and parse real CSV structure, including quoted and multiline fields.</p></article>
-            <article><span>02</span><h3>Measure</h3><p>Compute missing values, distinct counts, common values, and numeric statistics.</p></article>
-            <article><span>03</span><h3>Generate</h3><p>Create varied questions, expected answers, and evidence constrained by the profile.</p></article>
+            <article><div class="step-glyph">↗</div><span>01 · Inspect</span><h3>Trust the source, not the guess.</h3><p>Validate the URL and parse real CSV structure, including quoted and multiline fields.</p></article>
+            <article><div class="step-glyph">⌗</div><span>02 · Measure</span><h3>See the shape of every column.</h3><p>Compute completeness, distinct values, common values, and numeric statistics.</p></article>
+            <article><div class="step-glyph">✦</div><span>03 · Generate</span><h3>Ask only what the data supports.</h3><p>Create varied questions, expected answers, and evidence constrained by the profile.</p></article>
           </div>
         </section>
       </main>
