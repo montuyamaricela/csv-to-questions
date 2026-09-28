@@ -1,6 +1,7 @@
 node_modules
 dist
 .mastra
+.vercel
 .env.development
 .env
 *.db

@@ -1,12 +1,11 @@
 import {
   Observability,
-  MastraStorageExporter,
   MastraPlatformExporter,
   SensitiveDataFilter,
 } from '@mastra/observability';
 import { Mastra } from '@mastra/core/mastra';
+import { VercelDeployer } from '@mastra/deployer-vercel';
 import { PinoLogger } from '@mastra/loggers';
-import { LibSQLStore } from '@mastra/libsql';
 import { csvToQuestionsWorkflow } from './workflows/csv-to-questions-workflow';
 import { textQuestionAgent } from './agents/text-question-agent';
 import { csvSummarizationAgent } from './agents/csv-summarization-agent';
@@ -22,9 +21,8 @@ export const mastra = new Mastra({
     textQuestionAgent,
     csvSummarizationAgent,
   },
-  storage: new LibSQLStore({
-    id: 'mastra-storage',
-    url: 'file:./mastra.db',
+  deployer: new VercelDeployer({
+    maxDuration: 60,
   }),
   logger: new PinoLogger({
     name: 'Mastra',
@@ -35,7 +33,6 @@ export const mastra = new Mastra({
       default: {
         serviceName: 'mastra',
         exporters: [
-          new MastraStorageExporter(), // Persists observability events to Mastra Storage
           new MastraPlatformExporter(), // Sends observability events to Mastra Platform (if MASTRA_CLOUD_ACCESS_TOKEN is set)
         ],
         spanOutputProcessors: [
