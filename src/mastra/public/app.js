@@ -22,6 +22,11 @@ const summaryContainer = document.querySelector('#dataset-summary');
 const columnProfile = document.querySelector('#column-profile');
 const questionList = document.querySelector('#question-list');
 const questionHeading = document.querySelector('#question-heading');
+const questionSearch = document.querySelector('#question-search');
+const questionFilters = document.querySelector('#question-filters');
+const questionCountStatus = document.querySelector('#question-count-status');
+const questionEmpty = document.querySelector('#question-empty');
+const expandAllButton = document.querySelector('#expand-all-button');
 const newAnalysisButton = document.querySelector('#new-analysis-button');
 const copyAllButton = document.querySelector('#copy-all-button');
 
@@ -146,9 +151,30 @@ function renderColumns(columns) {
 
 function renderQuestions(questions) {
   questionHeading.textContent = `${questions.length} questions & answers`;
+  questionSearch.value = '';
+  const allFilter = element('button', 'filter-chip is-active', 'All');
+  allFilter.type = 'button';
+  allFilter.dataset.category = 'all';
+  allFilter.setAttribute('aria-pressed', 'true');
+  questionFilters.replaceChildren(allFilter);
+
+  [...new Set(questions.map(question => question.category))]
+    .sort((a, b) => a.localeCompare(b))
+    .forEach(category => {
+      const button = element('button', 'filter-chip', category);
+      button.type = 'button';
+      button.dataset.category = category;
+      button.setAttribute('aria-pressed', 'false');
+      questionFilters.append(button);
+    });
+
   questionList.replaceChildren(
     ...questions.map((question, index) => {
-      const card = element('article', 'question-card');
+      const card = element('details', 'question-card');
+      card.dataset.category = question.category;
+      card.dataset.search = `${question.question} ${question.expectedAnswer} ${question.category} ${question.difficulty}`.toLowerCase();
+
+      const summary = element('summary', 'question-card-summary');
       const meta = element('div', 'question-meta');
       const tags = element('div', 'question-tags');
       tags.append(
@@ -175,10 +201,34 @@ function renderQuestions(questions) {
 
       const questionText = element('h4');
       appendInlineTokens(questionText, parseInlineMarkdown(question.question));
-      card.append(meta, questionText, answer, evidence);
+      const disclosureIcon = element('span', 'question-toggle', '+');
+      disclosureIcon.setAttribute('aria-hidden', 'true');
+      summary.append(meta, questionText, disclosureIcon);
+
+      const questionActions = element('div', 'question-actions');
+      const copyButton = element('button', 'question-copy-button', 'Copy question');
+      copyButton.type = 'button';
+      copyButton.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(questionAsText(question, index));
+          copyButton.textContent = 'Copied';
+          window.setTimeout(() => (copyButton.textContent = 'Copy question'), 1800);
+        } catch {
+          copyButton.textContent = 'Copy failed';
+          window.setTimeout(() => (copyButton.textContent = 'Copy question'), 1800);
+        }
+      });
+      questionActions.append(copyButton);
+
+      const content = element('div', 'question-details');
+      content.append(answer, evidence, questionActions);
+      card.append(summary, content);
+      card.addEventListener('toggle', updateExpandAllLabel);
       return card;
     }),
   );
+
+  applyQuestionFilters();
 }
 
 function appendInlineTokens(parent, tokens) {
@@ -228,11 +278,39 @@ function renderResults(data) {
 
 function questionsAsText() {
   return currentQuestions
-    .map(
-      (question, index) =>
-        `${index + 1}. ${question.question}\nAnswer: ${question.expectedAnswer}\nEvidence: ${question.evidence.join('; ')}`,
-    )
+    .map((question, index) => questionAsText(question, index))
     .join('\n\n');
+}
+
+function questionAsText(question, index) {
+  return `${index + 1}. ${question.question}\nAnswer: ${question.expectedAnswer}\nEvidence: ${question.evidence.join('; ')}`;
+}
+
+function visibleQuestionCards() {
+  return [...questionList.querySelectorAll('.question-card:not([hidden])')];
+}
+
+function updateExpandAllLabel() {
+  const visibleCards = visibleQuestionCards();
+  const allExpanded = visibleCards.length > 0 && visibleCards.every(card => card.open);
+  expandAllButton.textContent = allExpanded ? 'Collapse all' : 'Expand all';
+}
+
+function applyQuestionFilters() {
+  const query = questionSearch.value.trim().toLowerCase();
+  const category = questionFilters.querySelector('.filter-chip.is-active')?.dataset.category || 'all';
+  let visibleCount = 0;
+
+  questionList.querySelectorAll('.question-card').forEach(card => {
+    const matchesQuery = !query || card.dataset.search.includes(query);
+    const matchesCategory = category === 'all' || card.dataset.category === category;
+    card.hidden = !(matchesQuery && matchesCategory);
+    if (!card.hidden) visibleCount += 1;
+  });
+
+  questionCountStatus.textContent = `Showing ${visibleCount} of ${currentQuestions.length} questions`;
+  questionEmpty.hidden = visibleCount !== 0;
+  updateExpandAllLabel();
 }
 
 countInput.addEventListener('input', () => {
@@ -248,8 +326,28 @@ sampleButton.addEventListener('click', () => {
 newAnalysisButton.addEventListener('click', () => {
   resultsSection.hidden = true;
   currentQuestions = [];
+  questionSearch.value = '';
   urlInput.focus();
   window.scrollTo({ top: document.querySelector('.workspace').offsetTop - 24, behavior: 'smooth' });
+});
+
+questionSearch.addEventListener('input', applyQuestionFilters);
+questionFilters.addEventListener('click', event => {
+  const selectedFilter = event.target.closest('.filter-chip');
+  if (!selectedFilter) return;
+
+  questionFilters.querySelectorAll('.filter-chip').forEach(filter => {
+    const isSelected = filter === selectedFilter;
+    filter.classList.toggle('is-active', isSelected);
+    filter.setAttribute('aria-pressed', String(isSelected));
+  });
+  applyQuestionFilters();
+});
+expandAllButton.addEventListener('click', () => {
+  const visibleCards = visibleQuestionCards();
+  const shouldExpand = visibleCards.some(card => !card.open);
+  visibleCards.forEach(card => (card.open = shouldExpand));
+  updateExpandAllLabel();
 });
 
 copyAllButton.addEventListener('click', async () => {

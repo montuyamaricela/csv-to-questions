@@ -10,8 +10,8 @@
     <meta name="theme-color" content="#09090b" />
     <title>QuestionGrid — Ask better questions of your data</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/styles.css?v=3" />
-    <script src="/app.js?v=4" type="module"></script>
+    <link rel="stylesheet" href="/styles.css?v=4" />
+    <script src="/app.js?v=5" type="module"></script>
   </head>
   <body>
     <div class="page-shell">
@@ -159,38 +159,56 @@
             <div>
               <p class="section-kicker">Your dataset, made teachable</p>
               <h2 id="results-title">Analysis complete</h2>
+              <p class="results-intro">Browse the generated set first. Open supporting analysis only when you need it.</p>
             </div>
             <button id="new-analysis-button" class="secondary-button" type="button">Analyze another</button>
           </div>
 
           <div id="metric-grid" class="metric-grid"></div>
 
-          <article class="summary-card">
-            <div class="card-heading">
-              <span class="card-index">01</span>
-              <div><p>Dataset brief</p><h3>What the data says</h3></div>
-            </div>
-            <div id="dataset-summary" class="summary-copy"></div>
-          </article>
-
-          <article class="profile-card">
-            <div class="card-heading">
-              <span class="card-index">02</span>
-              <div><p>Column profile</p><h3>Structure at a glance</h3></div>
-            </div>
-            <div id="column-profile" class="column-profile"></div>
-          </article>
-
           <article class="questions-section">
             <div class="questions-heading">
               <div class="card-heading">
-                <span class="card-index">03</span>
+                <span class="card-index">01</span>
                 <div><p>Generated set</p><h3 id="question-heading">Questions &amp; answers</h3></div>
               </div>
               <button id="copy-all-button" class="secondary-button" type="button">Copy all</button>
             </div>
+            <div class="question-toolbar" aria-label="Question controls">
+              <label class="question-search">
+                <span class="sr-only">Search questions</span>
+                <span aria-hidden="true">⌕</span>
+                <input id="question-search" type="search" placeholder="Search questions or answers" autocomplete="off" />
+              </label>
+              <button id="expand-all-button" class="secondary-button" type="button">Expand all</button>
+              <div id="question-filters" class="question-filters" role="group" aria-label="Filter questions by category">
+                <button class="filter-chip is-active" type="button" data-category="all" aria-pressed="true">All</button>
+              </div>
+            </div>
+            <p id="question-count-status" class="question-count-status" aria-live="polite"></p>
             <div id="question-list" class="question-list"></div>
+            <p id="question-empty" class="question-empty" hidden>No questions match this view.</p>
           </article>
+
+          <div class="supporting-analysis">
+            <details class="summary-card result-disclosure">
+              <summary class="card-heading">
+                <span class="card-index">02</span>
+                <div><p>Dataset brief</p><h3>What the data says</h3></div>
+                <span class="disclosure-icon" aria-hidden="true">+</span>
+              </summary>
+              <div id="dataset-summary" class="summary-copy"></div>
+            </details>
+
+            <details class="profile-card result-disclosure">
+              <summary class="card-heading">
+                <span class="card-index">03</span>
+                <div><p>Column profile</p><h3>Structure at a glance</h3></div>
+                <span class="disclosure-icon" aria-hidden="true">+</span>
+              </summary>
+              <div id="column-profile" class="column-profile"></div>
+            </details>
+          </div>
         </section>
 
         <section id="how-it-works" class="how-it-works" aria-labelledby="how-title">
