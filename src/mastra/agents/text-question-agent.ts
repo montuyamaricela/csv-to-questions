@@ -1,4 +1,5 @@
 import { Agent } from '@mastra/core/agent';
+import { geminiModel } from '../lib/gemini-model';
 
 export const textQuestionAgent = new Agent({
   id: 'text-question-agent',
@@ -66,5 +67,5 @@ Guidelines:
 
 The questions should help someone thoroughly understand and engage with the source material, especially when dealing with structured data formats.
   `,
-  model: 'google/gemini-2.5-flash',
+  model: geminiModel,
 });
