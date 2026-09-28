@@ -89,10 +89,9 @@ h1, h2, h3, h4, p { text-wrap: pretty; }
   backdrop-filter: blur(18px);
 }
 
-.brand { display: inline-flex; align-items: center; gap: 10px; color: white; font-size: 0.94rem; font-weight: 760; letter-spacing: -0.025em; text-decoration: none; }
-.brand-mark { display: grid; grid-template-columns: repeat(2, 6px); gap: 3px; width: 26px; height: 26px; padding: 5px; border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 8px; background: #1a1a1d; box-shadow: 0 0 28px rgba(183, 243, 74, 0.12); }
-.brand-mark span { border-radius: 1px; background: white; }
-.brand-mark span:nth-child(2), .brand-mark span:nth-child(3) { background: var(--lime); }
+.brand { display: inline-flex; align-items: center; color: white; text-decoration: none; }
+.brand-logo { display: block; width: auto; height: 34px; object-fit: contain; }
+.footer-brand .brand-logo { height: 38px; }
 nav { display: flex; align-items: center; gap: 2px; }
 .nav-link, .studio-link { border-radius: 10px; padding: 10px 13px; color: #aaaab4; font-size: 0.76rem; font-weight: 650; text-decoration: none; transition: background 160ms ease, color 160ms ease, transform 160ms ease; }
 .nav-link:hover { background: rgba(255, 255, 255, 0.06); color: white; }
@@ -364,6 +363,7 @@ footer p { margin: 0; color: #777782; font-size: 0.68rem; }
 
 @media (max-width: 480px) {
   .site-header { min-height: 58px; padding-left: 13px; }
+  .brand-logo { height: 31px; }
   .studio-link { background: transparent; color: #bcbcc5; }
   .preview-card { padding-inline: 18px; }
   .preview-chrome { margin-inline: -18px; }

@@ -9,6 +9,8 @@ const staticAssets = [
   { path: '/app.js', file: 'app.js', contentType: 'text/javascript; charset=utf-8' },
   { path: '/ui-utils.js', file: 'ui-utils.js', contentType: 'text/javascript; charset=utf-8' },
   { path: '/favicon.svg', file: 'favicon.svg', contentType: 'image/svg+xml' },
+  { path: '/syntara-logo.png', file: 'syntara-logo.png', contentType: 'image/png' },
+  { path: '/syntara-mark.png', file: 'syntara-mark.png', contentType: 'image/png' },
 ] as const;
 
 const staticRoutes = staticAssets.map(asset =>
